@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="../../Organization/knxprod-support/knx_project_20/knx-editor.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<KNX xmlns:op="http://github.com/OpenKNX/OpenKNXproducer" xmlns="http://knx.org/xml/project/20" CreatedBy="KNX MT" ToolVersion="5.1.255.16695">
+  <op:config name="%IR_NumChannelsDefault%" value="%N%" />
+  <ManufacturerData>
+    <Manufacturer RefId="M-00FA">
+      <ApplicationPrograms>
+        <ApplicationProgram Id="%AID%" ApplicationNumber="200" ApplicationVersion="1" ProgramType="ApplicationProgram" MaskVersion="MV-07B0" Name="IR" LoadProcedureStyle="MergedProcedure" PeiType="0" DefaultLanguage="de" DynamicTableManagement="false" Linkable="false" MinEtsVersion="4.0">
+          <Static>
+            <ParameterTypes>
+              <ParameterType Id="%AID%_PT-IRNumChannels" Name="IRNumChannels">
+                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="1" maxInclusive="%N%" />
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-IRMode" Name="IRMode">
+                <TypeRestriction Base="Value" SizeInBit="4">
+                  <Enumeration Text="Inaktiv" Value="0" Id="%ENID%" />
+                  <Enumeration Text="IR-Code empfangen" Value="1" Id="%ENID%" />
+                  <Enumeration Text="IR-Code senden" Value="2" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-IRCodeProtocol" Name="IRCodeProtocol">
+                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="0" maxInclusive="255" />
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-IRCodeAddress" Name="IRCodeAddress">
+                <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="0" maxInclusive="65535" />
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-IRCodeCommand" Name="IRCodeCommand">
+                <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="0" maxInclusive="65535" />
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-IRCodeBits" Name="IRCodeBits">
+                <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="0" maxInclusive="65535" />
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-IRCodeExtra" Name="IRCodeExtra">
+                <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="0" maxInclusive="65535" />
+              </ParameterType>
+            </ParameterTypes>
+            <Parameters>
+              <Union SizeInBit="8">
+                <Memory CodeSegment="%AID%_RS-04-00000" Offset="0" BitOffset="0" />
+                <Parameter Id="%AID%_UP-%TT%00001" Name="VisibleChannels" Offset="0" BitOffset="0" ParameterType="%AID%_PT-IRNumChannels"  Text="Verfügbare Kanäle" Value="%IR_NumChannelsDefault%" SuffixText=" von %N%" />
+              </Union>
+            </Parameters>
+            <ParameterRefs>
+              <ParameterRef Id="%AID%_UP-%TT%00001_R-%TT%0000101" RefId="%AID%_UP-%TT%00001" />
+            </ParameterRefs>
+            <ComObjectTable>
+            </ComObjectTable>
+            <ComObjectRefs>
+            </ComObjectRefs>
+            <Script>
+              <op:include href="IrModule.script.js" prefix="IR" type="script" />
+            </Script>
+          </Static>
+          <Dynamic>
+            
+            <Channel Id="%AID%_CH-%PREFIX%" Number="%PREFIX%" Name="Main" Text="Infrarot" Icon="led-on" HelpContext="Empty">
+              <ParameterBlock Id="%AID%_PB-nnn" Name="Basic" Text="Allgemein" Icon="cog-outline" HelpContext="IR-Dokumentation">
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="Irmodul" UIHint="Headline" />
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="Version: %ModuleVersion%" />
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="Kanalauswahl" UIHint="Headline" />
+                <ParameterRefRef RefId="%AID%_UP-%TT%00001_R-%TT%0000101" HelpContext="BASE-Verfuegbare-Kanaele" IndentLevel="1" />
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
+              </ParameterBlock>
+              
+              <op:include href="IrModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/*" type="template" prefix="IR" IsInner="true" />
+
+              <!-- followed by all channels -->
+              <choose ParamRefId="%AID%_UP-%TT%00001_R-%TT%0000101">
+                <when test="&lt;%N%">
+                  <ParameterBlock Id="%AID%_PB-nnn" Name="fAdditionalChannels" Text="(mehr)" Icon="dots-horizontal" HelpContext="Empty">
+                    <ParameterSeparator Id="%AID%_PS-nnn" Text="Kanalauswahl" UIHint="Headline" />
+                    <ParameterRefRef RefId="%AID%_UP-%TT%00001_R-%TT%0000101" HelpContext="BASE-Verfuegbare-Kanaele" IndentLevel="1" />
+                  </ParameterBlock>
+                </when>
+              </choose>
+
+            </Channel>
+          </Dynamic>
+        </ApplicationProgram>
+      </ApplicationPrograms>
+      <Baggages>
+        <Baggage TargetPath="" Name="Help_de.zip" Id="%FILE-HELP-de%">
+          <FileInfo TimeInfo="%DATETIME%" />
+        </Baggage>
+        <Baggage TargetPath="" Name="Icons.zip" Id="%FILE-ICONS%">
+          <FileInfo TimeInfo="%DATETIME%" />
+        </Baggage>
+      </Baggages>
+    </Manufacturer>
+  </ManufacturerData>
+</KNX>

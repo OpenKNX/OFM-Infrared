@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="../../Organization/knxprod-support/knx_project_20/knx-editor.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<KNX xmlns:op="http://github.com/OpenKNX/OpenKNXproducer" xmlns="http://knx.org/xml/project/20" CreatedBy="KNX MT" ToolVersion="5.1.255.16695">
+  <ManufacturerData>
+    <Manufacturer>
+      <ApplicationPrograms>
+        <ApplicationProgram>
+          <Static>
+            <Parameters>
+              <Parameter Id="%AID%_P-%TT%%CC%000" Name="Channel%C%Name" ParameterType="%AID%_PT-Text40Byte" Text="Beschreibung" Value="" />
+              <Union SizeInBit="8">
+                <Memory CodeSegment="%AID%_RS-04-00000" Offset="0" BitOffset="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%001" Name="c%C%Mode" Offset="0" BitOffset="0" ParameterType="%AID%_PT-IRMode" Text="Modus" Value="0" />
+              </Union>
+              <Union SizeInBit="72">
+                <Memory CodeSegment="%AID%_RS-04-00000" Offset="1" BitOffset="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%011" Name="c%C%CodeProtocol" Offset="0" BitOffset="0" ParameterType="%AID%_PT-IRCodeProtocol" Text="" Value="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%012" Name="c%C%CodeAddress"  Offset="1" BitOffset="0" ParameterType="%AID%_PT-IRCodeAddress"  Text="" Value="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%013" Name="c%C%CodeCommand"  Offset="3" BitOffset="0" ParameterType="%AID%_PT-IRCodeCommand"  Text="" Value="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%014" Name="c%C%CodeBits"     Offset="5" BitOffset="0" ParameterType="%AID%_PT-IRCodeBits"     Text="" Value="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%015" Name="c%C%CodeExtra"    Offset="7" BitOffset="0" ParameterType="%AID%_PT-IRCodeExtra"    Text="" Value="0" />
+              </Union>
+            </Parameters>
+            <ParameterRefs>
+              <ParameterRef Id="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" RefId="%AID%_P-%TT%%CC%000" />
+              <ParameterRef Id="%AID%_UP-%TT%%CC%001_R-%TT%%CC%00101" RefId="%AID%_UP-%TT%%CC%001" />
+              <ParameterRef Id="%AID%_UP-%TT%%CC%011_R-%TT%%CC%01101" RefId="%AID%_UP-%TT%%CC%011" />
+              <ParameterRef Id="%AID%_UP-%TT%%CC%012_R-%TT%%CC%01201" RefId="%AID%_UP-%TT%%CC%012" />
+              <ParameterRef Id="%AID%_UP-%TT%%CC%013_R-%TT%%CC%01301" RefId="%AID%_UP-%TT%%CC%013" />
+              <ParameterRef Id="%AID%_UP-%TT%%CC%014_R-%TT%%CC%01401" RefId="%AID%_UP-%TT%%CC%014" />
+              <ParameterRef Id="%AID%_UP-%TT%%CC%015_R-%TT%%CC%01501" RefId="%AID%_UP-%TT%%CC%015" />
+            </ParameterRefs>
+            <ComObjectTable>
+              <ComObject Id="%AID%_O-%TT%%CC%000" Name="c%C%Control" Number="%K0%"  ObjectSize="1 Bit" CommunicationFlag="Enabled" ReadFlag="Disabled" WriteFlag="Disabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" FunctionText="Empfangen" Text="IR-Taste: {{0:%C%}}" />
+            </ComObjectTable>
+            <ComObjectRefs>
+              <ComObjectRef Id="%AID%_O-%TT%%CC%000_R-%TT%%CC%00001" RefId="%AID%_O-%TT%%CC%000" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%000_R-%TT%%CC%00002" RefId="%AID%_O-%TT%%CC%000" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" FunctionText="Senden" WriteFlag="Enabled" TransmitFlag="Disabled" />
+            </ComObjectRefs>
+          </Static>
+          <Dynamic>
+            <ChannelIndependentBlock> 
+              <choose ParamRefId="%AID%_UP-%TT%00001_R-%TT%0000101">
+                <when test="&gt;=%C%">
+                  <!-- START INCLUDE HERE -->
+                  <ParameterBlock Id="%AID%_PB-nnn" Name="Channel%C%Page" Text="IR-Taste %C%: {{0: ...}}" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" HelpContext="IR-Dokumentation" ShowInComObjectTree="true" Icon="remote">
+                    <ParameterSeparator Id="%AID%_PS-nnn" Text="IR-Taste" UIHint="Headline" />
+                    <!-- Name -->
+                    <ParameterRefRef RefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" HelpContext="BASE-ChannelName" IndentLevel="1"/>
+                    <!-- Modus -->
+                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%001_R-%TT%%CC%00101" HelpContext="%DOC%" IndentLevel="1"/>
+
+                    <choose ParamRefId="%AID%_UP-%TT%%CC%001_R-%TT%%CC%00101">
+                      <when test="1">
+                        <ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00001" />
+                      </when>
+                      <when test="2">
+                        <ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00002" />
+                      </when>
+
+                      <when test="1 2">
+                        <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
+                        <ParameterSeparator Id="%AID%_PS-nnn" Text="IR-Code" UIHint="Headline" />
+                        <ParameterSeparator Id="%AID%_PS-nnn" Text="Hier wird der IR-Code definiert, der zum Senden oder Empfangen verwendet wird. Durch das Auslesen kann der zuletzt empfangene IR-Code übernommen werden." />
+
+                        <ParameterBlock Id="%AID%_PB-nnn" Name="Channel%C%IRCodeGrid" Inline="true" Layout="Grid" HelpContext="IR-Code">
+                          <Rows>
+                            <Row Id="%AID%_PB-nnn_R-1" Name="Row1" />
+                          </Rows>
+                          <Columns>
+                            <Column Id="%AID%_PB-nnn_C-1" Name="Col1" Width="10%" />
+                            <Column Id="%AID%_PB-nnn_C-2" Name="Col2" Width="13%" />
+                            <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="13%" />
+                            <Column Id="%AID%_PB-nnn_C-4" Name="Col4" Width="13%" />
+                            <Column Id="%AID%_PB-nnn_C-5" Name="Col5" Width="13%" />
+                            <Column Id="%AID%_PB-nnn_C-6" Name="Col6" Width="20%" />
+                            <Column Id="%AID%_PB-nnn_C-7" Name="Col7" Width="18%" />
+                          </Columns>
+                          <ParameterRefRef RefId="%AID%_UP-%TT%%CC%011_R-%TT%%CC%01101" Cell="1,1" />
+                          <ParameterRefRef RefId="%AID%_UP-%TT%%CC%012_R-%TT%%CC%01201" Cell="1,2" />
+                          <ParameterRefRef RefId="%AID%_UP-%TT%%CC%013_R-%TT%%CC%01301" Cell="1,3" />
+                          <ParameterRefRef RefId="%AID%_UP-%TT%%CC%014_R-%TT%%CC%01401" Cell="1,4" />
+                          <ParameterRefRef RefId="%AID%_UP-%TT%%CC%015_R-%TT%%CC%01501" Cell="1,5" />
+                          <Button Id="%AID%_B-%TT%%CC%001" Cell="1,6" Text="Auslesen" EventHandlerOnline="ConnectionOriented" EventHandler="readIrCode" EventHandlerParameters="{ &quot;Channel&quot;: %C% }" />
+                          <Button Id="%AID%_B-%TT%%CC%002" Cell="1,7" Text="Testen"   EventHandlerOnline="ConnectionOriented" EventHandler="testIrCode" EventHandlerParameters="{ &quot;Channel&quot;: %C% }" />
+                        </ParameterBlock>
+                      </when>
+                    </choose>
+                  </ParameterBlock>
+                </when>
+              </choose>
+            </ChannelIndependentBlock>
+          </Dynamic>
+        </ApplicationProgram>
+      </ApplicationPrograms>
+    </Manufacturer>
+  </ManufacturerData>
+</KNX>

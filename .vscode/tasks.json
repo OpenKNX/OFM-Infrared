@@ -14,7 +14,7 @@
                 "--BaggagesDir",
                 "src/Baggages/Help_de",
                 "--Prefix",
-                "MTR"
+                "IR"
             ],
             "problemMatcher": [],
             "group": "test"
