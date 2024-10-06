@@ -10,9 +10,6 @@ class InfraredChannel : public OpenKNX::Channel
 
   public:
     InfraredChannel(uint8_t index);
-
-    // void setup() override;
-    // void loop() override;
     const std::string name() override;
 
     void processInputKo(GroupObject &ko);

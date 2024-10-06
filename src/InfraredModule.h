@@ -10,7 +10,8 @@ class InfraredModule : public OpenKNX::Module
   protected:
     InfraredChannel *_channels[IR_ChannelCount];
     uint8_t _currentChannel = 0;
-    InfraredCode _lastCode;
+    InfraredCode _lastReceviedCode;
+    uint32_t _lastReceviedTime = 0;
 
     void receiveIrCode();
     void processRelease();

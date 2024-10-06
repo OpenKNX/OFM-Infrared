@@ -11,14 +11,6 @@ const std::string InfraredChannel::name()
     return "IR";
 }
 
-// void InfraredChannel::setup()
-// {
-// }
-
-// void InfraredChannel::loop()
-// {
-// }
-
 void InfraredChannel::processInputKo(GroupObject &ko)
 {
     if (!ParamIR_cMode != 2) return; // Not in send mode
@@ -29,7 +21,13 @@ void InfraredChannel::processInputKo(GroupObject &ko)
         if ((bool)ko.value(DPT_Bool))
         {
             // Send IR
-            //openknxInfraredModule.transmitIrCode(ParamIR_cCodeProtocol, ParamIR_cCodeAddress, ParamIR_cCodeCommand, ParamIR_cCodeBits, ParamIR_cCodeExtra);
+            InfraredCode code;
+            code.protocol = ParamIR_cCodeProtocol;
+            code.address = ParamIR_cCodeAddress;
+            code.command = ParamIR_cCodeCommand;
+            code.numberOfBits = ParamIR_cCodeBits;
+            code.extra = ParamIR_cCodeExtra;
+            openknxInfraredModule.transmitIrCode(code);
         }
         else
         {
@@ -41,13 +39,23 @@ void InfraredChannel::processInputKo(GroupObject &ko)
 
 void InfraredChannel::processPress(InfraredCode &code)
 {
-    if (!ParamIR_cMode != 1) return; // Not in receive mode
+    if (ParamIR_cMode != 1) return; // Not in receive mode
     if (!ParamIR_cCodeProtocol) return;
     if (!ParamIR_cCodeAddress) return;
     if (!ParamIR_cCodeCommand) return;
     if (!ParamIR_cCodeBits) return;
+    if (ParamIR_cCodeProtocol != code.protocol) return;
+    if (ParamIR_cCodeAddress != code.address) return;
+    if (ParamIR_cCodeCommand != code.command) return;
+    if (ParamIR_cCodeBits != code.numberOfBits) return;
+    if (ParamIR_cCodeExtra != code.extra) return;
 
     logTraceP("processPress");
+
+    logIndentUp();
+    // stop previouse if running
+    processRelease();
+    logIndentDown();
 
     KoIR_cControl.value(true, DPT_Bool);
     _pressed = true;
@@ -55,8 +63,8 @@ void InfraredChannel::processPress(InfraredCode &code)
 
 void InfraredChannel::processRelease()
 {
-    if (!ParamIR_cMode != 1) return; // Not in receive mode
-    if (!_pressed) return;           // no press is active
+    if (ParamIR_cMode != 1) return; // Not in receive mode
+    if (!_pressed) return;          // no press is active
 
     logTraceP("processRelease");
 
