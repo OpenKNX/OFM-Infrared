@@ -82,7 +82,7 @@
                           <ParameterRefRef RefId="%AID%_UP-%TT%%CC%014_R-%TT%%CC%01401" Cell="1,4" />
                           <ParameterRefRef RefId="%AID%_UP-%TT%%CC%015_R-%TT%%CC%01501" Cell="1,5" />
                           <Button Id="%AID%_B-%TT%%CC%001" Cell="1,6" Text="Auslesen" EventHandlerOnline="ConnectionOriented" EventHandler="readIrCode" EventHandlerParameters="{ &quot;Channel&quot;: %C% }" />
-                          <Button Id="%AID%_B-%TT%%CC%002" Cell="1,7" Text="Testen"   EventHandlerOnline="ConnectionOriented" EventHandler="testIrCode" EventHandlerParameters="{ &quot;Channel&quot;: %C% }" />
+                          <Button Id="%AID%_B-%TT%%CC%002" Cell="1,7" Text="Senden"   EventHandlerOnline="ConnectionOriented" EventHandler="testIrCode" EventHandlerParameters="{ &quot;Channel&quot;: %C% }" />
                         </ParameterBlock>
                       </when>
                     </choose>

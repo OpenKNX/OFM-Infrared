@@ -20,10 +20,8 @@ class InfraredModule : public OpenKNX::Module
   public:
     void setup(bool configured) override;
     void loop(bool configured) override;
-    bool processCommand(const std::string command, bool diagnose) override;
-    void showHelp() override;
     void processInputKo(GroupObject &ko) override;
-    void transmitIrCode(InfraredCode &code);
+    bool transmitIrCode(InfraredCode &code);
     InfraredChannel *getChannel(uint8_t index);
 
     bool processFunctionProperty(uint8_t objectIndex, uint8_t propertyId, uint8_t length, uint8_t *data, uint8_t *resultData, uint8_t &resultLength) override;

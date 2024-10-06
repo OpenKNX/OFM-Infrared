@@ -13,7 +13,7 @@ const std::string InfraredChannel::name()
 
 void InfraredChannel::processInputKo(GroupObject &ko)
 {
-    if (!ParamIR_cMode != 2) return; // Not in send mode
+    if (ParamIR_cMode != 2) return; // Not in send mode
 
     if (IR_KoCalcIndex(ko.asap()) == IR_KocControl)
     {

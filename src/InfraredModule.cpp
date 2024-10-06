@@ -4,6 +4,7 @@
 #define IR_RECV_PIN 13
 #define IR_SEND_PIN 14
 #define NO_LED_FEEDBACK_CODE
+#define SEND_PWM_BY_TIMER
 
 #include <IRremote.hpp>
 
@@ -54,17 +55,6 @@ void InfraredModule::processInputKo(GroupObject &ko)
     }
 }
 
-bool InfraredModule::processCommand(const std::string command, bool diagnose)
-{
-    // TODO
-    return false;
-}
-
-void InfraredModule::showHelp()
-{
-    // TODO
-}
-
 void InfraredModule::processPress(InfraredCode &code)
 {
     for (uint8_t i = 0; i < IR_ChannelCount; i++)
@@ -81,9 +71,13 @@ void InfraredModule::processRelease()
     }
 }
 
-void InfraredModule::transmitIrCode(InfraredCode &code)
+bool InfraredModule::transmitIrCode(InfraredCode &code)
 {
-    // TODO Transmit IR Code
+    if (!code.protocol) return false;
+    if (!code.address) return false;
+    if (!code.command) return false;
+    if (!code.numberOfBits) return false;
+
     IRData irTransitData;
     irTransitData.protocol = (decode_type_t)code.protocol;
     irTransitData.address = code.address;
@@ -94,11 +88,12 @@ void InfraredModule::transmitIrCode(InfraredCode &code)
     IrReceiver.disableIRIn();
     IrSender.write(&irTransitData);
     IrReceiver.enableIRIn();
+
+    return true;
 }
 
 void InfraredModule::receiveIrCode()
 {
-    // TODO Receive IR Code
     if (IrReceiver.decode())
     {
         if (IrReceiver.decodedIRData.protocol && IrReceiver.decodedIRData.address && IrReceiver.decodedIRData.numberOfBits)
@@ -107,25 +102,36 @@ void InfraredModule::receiveIrCode()
             _lastReceviedCode.address = IrReceiver.decodedIRData.address;
             _lastReceviedCode.command = IrReceiver.decodedIRData.command;
             _lastReceviedCode.numberOfBits = IrReceiver.decodedIRData.numberOfBits;
-            _lastReceviedCode.extra = IrReceiver.decodedIRData.extra;
+
+            if (IrReceiver.decodedIRData.flags & IRDATA_FLAGS_EXTRA_INFO)
+                _lastReceviedCode.extra = IrReceiver.decodedIRData.extra;
+            else
+                _lastReceviedCode.extra = 0;
+
+            // filter toggle bit
+            if (IrReceiver.decodedIRData.flags & IRDATA_FLAGS_TOGGLE_BIT)
+                _lastReceviedCode.address &= 0b01111111;
 
             // is not repeated
-            if (IrReceiver.decodedIRData.flags & IRDATA_FLAGS_IS_REPEAT)
+            if (_lastReceviedTime && IrReceiver.decodedIRData.flags & IRDATA_FLAGS_IS_REPEAT)
             {
                 _lastReceviedTime = millis();
             }
             else
             {
-                logDebugP("receiveIrCode: %i/%i/%i/%i/%i/%i",
-                          IrReceiver.decodedIRData.protocol,
-                          IrReceiver.decodedIRData.address,
-                          IrReceiver.decodedIRData.command,
-                          IrReceiver.decodedIRData.numberOfBits,
-                          IrReceiver.decodedIRData.extra,
-                          IrReceiver.decodedIRData.flags);
+                logInfoP("IR-Code: %i/%i/%i/%i/%i/%i",
+                         IrReceiver.decodedIRData.protocol,
+                         IrReceiver.decodedIRData.address,
+                         IrReceiver.decodedIRData.command,
+                         IrReceiver.decodedIRData.numberOfBits,
+                         IrReceiver.decodedIRData.extra,
+                         IrReceiver.decodedIRData.flags);
 
                 logIndentUp();
+                logDebugP("pressed");
+                logIndentUp();
                 processPress(_lastReceviedCode);
+                logIndentDown();
                 logIndentDown();
                 _lastReceviedTime = millis();
             }
@@ -136,16 +142,12 @@ void InfraredModule::receiveIrCode()
 
     if (_lastReceviedTime && delayCheck(_lastReceviedTime, 150))
     {
-        logDebugP("releaseIrCode: %i/%i/%i/%i/%i",
-                  _lastReceviedCode.protocol,
-                  _lastReceviedCode.address,
-                  _lastReceviedCode.command,
-                  _lastReceviedCode.numberOfBits,
-                  _lastReceviedCode.extra);
-
         _lastReceviedTime = 0;
         logIndentUp();
+        logDebugP("released");
+        logIndentUp();
         processRelease();
+        logIndentDown();
         logIndentDown();
     }
 }
@@ -181,10 +183,33 @@ bool InfraredModule::processFunctionProperty(uint8_t objectIndex, uint8_t proper
             resultData[8] = (uint8_t)(_lastReceviedCode.extra >> 8);
             resultData[9] = (uint8_t)_lastReceviedCode.extra;
             resultLength = 10;
+
+            logDebugP("Return last IR-Code to ETS: %i/%i/%i/%i/%i", _lastReceviedCode.protocol, _lastReceviedCode.address, _lastReceviedCode.command, _lastReceviedCode.numberOfBits, _lastReceviedCode.extra);
             return true;
         }
         case 2:
         {
+            InfraredCode code;
+            code.protocol = data[1];
+            code.address = (data[2] << 8) | data[3];
+            code.command = (data[4] << 8) | data[5];
+            code.numberOfBits = (data[6] << 8) | data[7];
+            code.extra = (data[8] << 8) | data[9];
+
+            resultLength = 1;
+            logDebugP("Send IR-Code by ETS: %i/%i/%i/%i/%i", code.protocol, code.address, code.command, code.numberOfBits, code.extra);
+            logIndentUp();
+            if (transmitIrCode(code))
+            {
+                resultData[0] = 0;
+            }
+            else
+            {
+                resultData[0] = 1;
+            }
+            logIndentDown();
+
+            return true;
         }
     }
 
