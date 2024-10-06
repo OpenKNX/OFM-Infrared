@@ -48,7 +48,7 @@
             <ComObjectRefs>
             </ComObjectRefs>
             <Script>
-              <op:include href="IrModule.script.js" prefix="IR" type="script" />
+              <op:include href="InfraredModule.script.js" prefix="IR" type="script" />
             </Script>
           </Static>
           <Dynamic>
@@ -63,7 +63,7 @@
                 <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
               </ParameterBlock>
               
-              <op:include href="IrModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/*" type="template" prefix="IR" IsInner="true" />
+              <op:include href="InfraredModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/*" type="template" prefix="IR" IsInner="true" />
 
               <!-- followed by all channels -->
               <choose ParamRefId="%AID%_UP-%TT%00001_R-%TT%0000101">
