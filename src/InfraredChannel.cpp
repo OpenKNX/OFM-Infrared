@@ -29,7 +29,7 @@ void InfraredChannel::processInputKo(GroupObject &ko)
         if ((bool)ko.value(DPT_Bool))
         {
             // Send IR
-            openknxInfraredModule.transmitIrCode(ParamIR_cCodeProtocol, ParamIR_cCodeAddress, ParamIR_cCodeCommand, ParamIR_cCodeBits, ParamIR_cCodeExtra);
+            //openknxInfraredModule.transmitIrCode(ParamIR_cCodeProtocol, ParamIR_cCodeAddress, ParamIR_cCodeCommand, ParamIR_cCodeBits, ParamIR_cCodeExtra);
         }
         else
         {
@@ -39,7 +39,7 @@ void InfraredChannel::processInputKo(GroupObject &ko)
     }
 }
 
-void InfraredChannel::processPress(uint8_t protocol, uint16_t address, uint16_t command, uint16_t bits, uint16_t extra)
+void InfraredChannel::processPress(InfraredCode &code)
 {
     if (!ParamIR_cMode != 1) return; // Not in receive mode
     if (!ParamIR_cCodeProtocol) return;

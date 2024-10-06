@@ -1,5 +1,12 @@
 #include "InfraredModule.h"
 
+// TODO move to hardware.h and validate define
+#define IR_RECV_PIN 13
+#define IR_SEND_PIN 14
+#define NO_LED_FEEDBACK_CODE
+
+#include <IRremote.hpp>
+
 const std::string InfraredModule::name()
 {
     return "IR";
@@ -12,7 +19,8 @@ const std::string InfraredModule::version()
 
 void InfraredModule::setup(bool configured)
 {
-    // TODO Setup IR?
+    IrReceiver.begin(IR_RECV_PIN);
+    IrSender.begin();
 
     if (!configured) return;
 
@@ -57,11 +65,11 @@ void InfraredModule::showHelp()
     // TODO
 }
 
-void InfraredModule::processPress(uint8_t protocol, uint16_t address, uint16_t command, uint16_t bits, uint16_t extra)
+void InfraredModule::processPress(InfraredCode &code)
 {
     for (uint8_t i = 0; i < IR_ChannelCount; i++)
     {
-        _channels[i]->processPress(protocol, address, command, bits, extra);
+        _channels[i]->processPress(code);
     }
 }
 
@@ -73,7 +81,7 @@ void InfraredModule::processRelease()
     }
 }
 
-void InfraredModule::transmitIrCode(uint8_t protocol, uint16_t address, uint16_t command, uint16_t bits, uint16_t extra)
+void InfraredModule::transmitIrCode(InfraredCode &code)
 {
     // TODO Transmit IR Code
 }
@@ -83,9 +91,21 @@ void InfraredModule::receiveIrCode()
     // TODO Receive IR Code
 
     // do
-    // processPress(uint8_t protocol, uint16_t address, uint16_t command, uint16_t bits, uint16_t extra);
+    // processPress(code);
     // or
     // processRelease();
+}
+
+bool InfraredModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyId, uint8_t length, uint8_t *data, uint8_t *resultData, uint8_t &resultLength)
+{
+    // TODO
+    return false;
+}
+
+bool InfraredModule::processFunctionPropertyState(uint8_t objectIndex, uint8_t propertyId, uint8_t length, uint8_t *data, uint8_t *resultData, uint8_t &resultLength)
+{
+    // TODO
+    return false;
 }
 
 InfraredModule openknxInfraredModule;
