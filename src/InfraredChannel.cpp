@@ -27,6 +27,7 @@ void InfraredChannel::processInputKo(GroupObject &ko)
             code.command = ParamIR_cCodeCommand;
             code.numberOfBits = ParamIR_cCodeBits;
             code.extra = ParamIR_cCodeExtra;
+            logInfoP("Send IR-Code: %i/%i/%i/%i/%i", code.protocol, code.address, code.command, code.numberOfBits, code.extra);
             openknxInfraredModule.transmitIrCode(code);
         }
         else

@@ -119,7 +119,7 @@ void InfraredModule::receiveIrCode()
             }
             else
             {
-                logInfoP("IR-Code: %i/%i/%i/%i/%i/%i",
+                logInfoP("Received IR-Code: %i/%i/%i/%i/%i/%i",
                          IrReceiver.decodedIRData.protocol,
                          IrReceiver.decodedIRData.address,
                          IrReceiver.decodedIRData.command,
@@ -184,7 +184,7 @@ bool InfraredModule::processFunctionProperty(uint8_t objectIndex, uint8_t proper
             resultData[9] = (uint8_t)_lastReceviedCode.extra;
             resultLength = 10;
 
-            logDebugP("Return last IR-Code to ETS: %i/%i/%i/%i/%i", _lastReceviedCode.protocol, _lastReceviedCode.address, _lastReceviedCode.command, _lastReceviedCode.numberOfBits, _lastReceviedCode.extra);
+            logInfoP("Return last IR-Code to ETS: %i/%i/%i/%i/%i", _lastReceviedCode.protocol, _lastReceviedCode.address, _lastReceviedCode.command, _lastReceviedCode.numberOfBits, _lastReceviedCode.extra);
             return true;
         }
         case 2:
@@ -197,7 +197,7 @@ bool InfraredModule::processFunctionProperty(uint8_t objectIndex, uint8_t proper
             code.extra = (data[8] << 8) | data[9];
 
             resultLength = 1;
-            logDebugP("Send IR-Code by ETS: %i/%i/%i/%i/%i", code.protocol, code.address, code.command, code.numberOfBits, code.extra);
+            logInfoP("Send IR-Code by ETS: %i/%i/%i/%i/%i", code.protocol, code.address, code.command, code.numberOfBits, code.extra);
             logIndentUp();
             if (transmitIrCode(code))
             {
