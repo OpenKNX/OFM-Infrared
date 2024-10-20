@@ -1,18 +1,24 @@
 {
-    "name": "OFM-Infrared",
-    "version": "0.1.0",
-    "dependencies": {
-        "Arduino-IRremote": "https://github.com/Arduino-IRremote/Arduino-IRremote#610d116"
-    },
-    "description": "A Module to send or receive ir-codes",
-    "homepage": "https://openknx.de",
-    "authors": {
+  "name": "OFM-Infrared",
+  "version": "0.1.0",
+  "dependencies": {
+    "Arduino-IRremote": "https://github.com/Arduino-IRremote/Arduino-IRremote#610d116"
+  },
+  "description": "A Module to send or receive ir-codes",
+  "homepage": "https://openknx.de",
+  "authors": [
+    {
       "name": "thewhobox",
       "email": "45664417+thewhobox@users.noreply.github.com",
       "maintainer": true
     },
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/OpenKNX/OFM-Infrared"
+    {
+      "name": "traxanos",
+      "maintainer": true
     }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenKNX/OFM-Infrared"
   }
+}
