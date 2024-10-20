@@ -1,6 +1,6 @@
 {
     "name": "OFM-Infrared",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "dependencies": {
         "Arduino-IRremote": "https://github.com/Arduino-IRremote/Arduino-IRremote#610d116"
     },
