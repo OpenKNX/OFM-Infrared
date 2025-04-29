@@ -3,8 +3,11 @@
 // TODO move to hardware.h and validate define
 #define IR_RECV_PIN 13
 #define IR_SEND_PIN 14
-#define NO_LED_FEEDBACK_CODE
+#define NO_LED_RECEIVE_FEEDBACK_CODE
+#define NO_LED_SEND_FEEDBACK_CODE
 #define SEND_PWM_BY_TIMER
+#define RAW_BUFFER_LENGTH 1000
+#define RECORD_GAP_MICROS 12000
 
 #include <IRremote.hpp>
 

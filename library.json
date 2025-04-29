@@ -1,8 +1,8 @@
 {
   "name": "OFM-Infrared",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "dependencies": {
-    "Arduino-IRremote": "https://github.com/Arduino-IRremote/Arduino-IRremote#610d116"
+    "Arduino-IRremote": "https://github.com/Arduino-IRremote/Arduino-IRremote#c0d4c08"
   },
   "description": "A Module to send or receive ir-codes",
   "homepage": "https://openknx.de",
