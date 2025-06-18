@@ -1,8 +1,4 @@
 #include "InfraredModule.h"
-
-// TODO move to hardware.h and validate define
-#define IR_RECV_PIN 13
-#define IR_SEND_PIN 14
 #define NO_LED_RECEIVE_FEEDBACK_CODE
 #define NO_LED_SEND_FEEDBACK_CODE
 #define SEND_PWM_BY_TIMER
@@ -26,6 +22,13 @@ void InfraredModule::setup(bool configured)
     IrReceiver.begin(IR_RECV_PIN);
     IrSender.begin();
 
+    #ifdef IR_PWR_PIN
+    logInfoP("Powering on IR receiver | p=%i", IR_PWR_PIN);
+    // there is no logic to only activate when using
+    pinMode(IR_PWR_PIN, OUTPUT);
+    digitalWrite(IR_PWR_PIN, HIGH); // Power on IR receiver
+    #endif
+
     if (!configured) return;
 
     for (uint8_t i = 0; i < IR_ChannelCount; i++)
@@ -35,9 +38,10 @@ void InfraredModule::setup(bool configured)
     }
 }
 
+unsigned long lastx = 0;
 void InfraredModule::loop(bool configured)
 {
-    receiveIrCode();
+    receiveIrCode(configured);
 
     if (!configured) return;
 
@@ -95,7 +99,7 @@ bool InfraredModule::transmitIrCode(InfraredCode &code)
     return true;
 }
 
-void InfraredModule::receiveIrCode()
+void InfraredModule::receiveIrCode(bool configured)
 {
     if (IrReceiver.decode())
     {
@@ -135,9 +139,12 @@ void InfraredModule::receiveIrCode()
 
                     logIndentUp();
                     logDebugP("pressed");
-                    logIndentUp();
-                    processPress(_lastReceviedCode);
-                    logIndentDown();
+                    if(configured)
+                    {
+                        logIndentUp();
+                        processPress(_lastReceviedCode);
+                        logIndentDown();
+                    }
                     logIndentDown();
                     _lastReceviedTime = millis();
                 }
@@ -152,9 +159,12 @@ void InfraredModule::receiveIrCode()
         _lastReceviedTime = 0;
         logIndentUp();
         logDebugP("released");
-        logIndentUp();
-        processRelease();
-        logIndentDown();
+        if(configured)
+        {
+            logIndentUp();
+            processRelease();
+            logIndentDown();
+        }
         logIndentDown();
     }
 }

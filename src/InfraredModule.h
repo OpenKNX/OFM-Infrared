@@ -13,7 +13,7 @@ class InfraredModule : public OpenKNX::Module
     InfraredCode _lastReceviedCode;
     uint32_t _lastReceviedTime = 0;
 
-    void receiveIrCode();
+    void receiveIrCode(bool configured);
     void processRelease();
     void processPress(InfraredCode &code);
 
